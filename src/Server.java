@@ -19,20 +19,13 @@ class QuoteService {
     }
 }
 
-public class Server {
+class ServiceThread extends Thread {
 
-    public static void main(String[] args) throws IOException {
+    Socket sock;
 
-        QuoteService quoteService = new QuoteService();
-
-        ServerSocket serSocket = new ServerSocket(9999);
-
-        System.out.println("Start listening to 9999");
-
-        while (true) {
-            System.out.println("Waiting for client...");
-            Socket sock = serSocket.accept();
-
+    public void run() {
+        try {
+            QuoteService quoteService = new QuoteService();
             InputStream in = sock.getInputStream();
             OutputStream out = sock.getOutputStream();
 
@@ -53,6 +46,31 @@ public class Server {
 
             System.out.println("Response sent...");
             sock.close();
+        } catch (Exception e) {
+        }
+    }
+
+    public ServiceThread(Socket sock) {
+        this.sock = sock;
+    }
+}
+
+public class Server {
+
+    public static void main(String[] args) throws IOException {
+
+
+        ServerSocket serSocket = new ServerSocket(9999);
+
+        System.out.println("Start listening to 9999");
+
+        while (true) {
+            System.out.println("Waiting for client...");
+            Socket sock = serSocket.accept();
+
+            // Create a new thread to serve the client
+            System.out.println("Starting a thread which will serve the cleint");
+            new ServiceThread(sock).start();
         }
     }
 }
