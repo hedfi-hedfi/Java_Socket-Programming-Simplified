@@ -3,29 +3,56 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+
+class QuoteService {
+    Map<String, String> productInfo = new HashMap<String, String>();
+
+    public QuoteService() {
+        productInfo.put("a", "100");
+        productInfo.put("b", "200");
+    }
+
+    public String getQuote(String product) {
+        return productInfo.get(product);
+    }
+}
 
 public class Server {
 
     public static void main(String[] args) throws IOException {
+
+        QuoteService quoteService = new QuoteService();
+
         ServerSocket serSocket = new ServerSocket(9999);
 
-        System.out.println("Waiting for client...");
-        Socket sock = serSocket.accept();
+        System.out.println("Start listening to 9999");
 
-        System.out.println("Client connected..");
+        while (true) {
+            System.out.println("Waiting for client...");
+            Socket sock = serSocket.accept();
 
-        InputStream in = sock.getInputStream();
-        OutputStream out = sock.getOutputStream();
+            InputStream in = sock.getInputStream();
+            OutputStream out = sock.getOutputStream();
 
-        byte[] buffer = new byte[1024];
-        in.read(buffer);
+            System.out.println("Waiting for product information from the client...");
+            byte[] request = new byte[100];
+            in.read(request);
 
-        System.out.println("Received from client - " + new String(buffer).trim());
+            String product = new String(request).trim();
 
-        out.write("Hello from Server...".getBytes());
+            System.out.println("Received product name - " + product);
 
-        sock.close();
-        serSocket.close();
+            String price = quoteService.getQuote(product);
+            if (price == null) {
+                price = "Invalid product";
+            }
+
+            out.write(price.getBytes());
+
+            System.out.println("Response sent...");
+            sock.close();
+        }
     }
-
 }
