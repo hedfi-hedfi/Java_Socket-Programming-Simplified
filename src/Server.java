@@ -9,7 +9,7 @@ public class Server {
     public static void main(String[] args) throws IOException {
         ServerSocket serSocket = new ServerSocket(9999);
 
-        System.out.println("Wating for client...");
+        System.out.println("Waiting for client...");
         Socket sock = serSocket.accept();
 
         System.out.println("Client connected..");
@@ -20,7 +20,7 @@ public class Server {
         byte[] buffer = new byte[1024];
         in.read(buffer);
 
-        System.out.println("Reveived from client - " + new String(buffer).trim());
+        System.out.println("Received from client - " + new String(buffer).trim());
 
         out.write("Hello from Server...".getBytes());
 
