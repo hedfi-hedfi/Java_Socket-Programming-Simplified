@@ -9,7 +9,10 @@ public class Server {
     public static void main(String[] args) throws IOException {
         ServerSocket serSocket = new ServerSocket(9999);
 
+        System.out.println("Wating for client...");
         Socket sock = serSocket.accept();
+
+        System.out.println("Client connected..");
 
         InputStream in = sock.getInputStream();
         OutputStream out = sock.getOutputStream();
