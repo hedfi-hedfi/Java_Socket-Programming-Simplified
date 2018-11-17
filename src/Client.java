@@ -23,7 +23,7 @@ public class Client {
         in.read(response);
 
         String strResponse = new String(response).trim();
-        System.out.println("Obtained response is -- " + response);
+        System.out.println("Obtained response is -- " + strResponse);
 
         sock.close();
     }
