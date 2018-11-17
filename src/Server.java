@@ -17,7 +17,7 @@ public class Server {
         byte[] buffer = new byte[1024];
         in.read(buffer);
 
-        System.out.print("Reveived from client - " + new String(buffer).trim());
+        System.out.println("Reveived from client - " + new String(buffer).trim());
 
         out.write("Hello from Server...".getBytes());
 
